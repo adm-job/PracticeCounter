@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,28 +8,45 @@ using UnityEngine.UIElements;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField]private TextMeshProUGUI _textTimer;
-    
-    private float _dealy = 0.5f;
-    private float _startTikmer = 0;
+    [SerializeField] private TextMeshProUGUI _textTimer;
+
+    private double _dealy = 0.5;
+    private double _startTimer = 0;
 
     private void Start()
     {
-        _textTimer.text = _startTikmer.ToString();
+        _textTimer.text = _startTimer.ToString();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
-            PrintTimer();
+            StartCoroutine(PrintTimer());
         }
     }
 
     private IEnumerator PrintTimer()
     {
-        _textTimer.text = "12334";
-        yield return null;
+        double timer = Convert.ToDouble(_textTimer.text);
+        bool isStart = false;
+
+        /*        if (Input.GetMouseButtonDown(0) || isStart)
+                    isStart = false;
+                else
+                    isStart = true;*/
+
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+
+        isStart = true;
+        while (isStart)
+        {
+
+            timer += _dealy;
+            _textTimer.text = timer.ToString();
+        if (Input.GetMouseButtonDown(0)) 
+                isStart = false;
+        }
 
     }
 
