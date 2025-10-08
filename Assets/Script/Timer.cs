@@ -10,44 +10,39 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _textTimer;
 
-    private double _dealy = 0.5;
-    private double _startTimer = 0;
+    private float _dealy = 0.5f;
+    private int _resetTimer = 0;
+    private int _stepTimer = 1;
+    private bool _isStart = true;
 
     private void Start()
     {
-        _textTimer.text = _startTimer.ToString();
+        _textTimer.text = _resetTimer.ToString();
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(PrintTimer());
+            if (_isStart)
+                _isStart = false;
+            else
+                _isStart = true;
         }
+
+        StartCoroutine(PrintTimer());
     }
 
     private IEnumerator PrintTimer()
     {
-        double timer = Convert.ToDouble(_textTimer.text);
-        bool isStart = false;
+        int.TryParse(_textTimer.text, out int timer);
 
-        /*        if (Input.GetMouseButtonDown(0) || isStart)
-                    isStart = false;
-                else
-                    isStart = true;*/
+        yield return new WaitWhile(() => _isStart);
 
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        yield return new WaitForSeconds(_dealy);
 
-        isStart = true;
-        while (isStart)
-        {
-
-            timer += _dealy;
-            _textTimer.text = timer.ToString();
-        if (Input.GetMouseButtonDown(0)) 
-                isStart = false;
-        }
-
+        timer += _stepTimer;
+        _textTimer.text = timer.ToString();
     }
 
 }
