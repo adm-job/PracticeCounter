@@ -7,6 +7,16 @@ public class Timer : MonoBehaviour
     [SerializeField] private TimerUI timerUI = new();
     private bool _isStart = true;
     private int mouseButton = 0;
+    private float _dealy = 0.5f;
+    private int _stepTimer = 1;
+    private int _time = 0;
+    private Coroutine _timer;
+
+    private void Start()
+    {
+        if (_timer != null)
+            StopCoroutine(_timer);
+    }
 
     private void Update()
     {
@@ -14,14 +24,28 @@ public class Timer : MonoBehaviour
         {
             if (_isStart)
             {
-                StartCoroutine(timerUI.PrintTimer());
+                _timer = StartCoroutine(Counter());
                 _isStart = false;
             }
             else
             {
-                StopCoroutine(timerUI.PrintTimer());
+                if (_timer != null)
+                    StopCoroutine(_timer);
+
                 _isStart = true;
             }
         }
+    }
+
+    private IEnumerator Counter()
+    {
+        while (enabled)
+        {
+            _time += _stepTimer;
+            timerUI.Draw(_time);
+
+            yield return new WaitForSeconds(_dealy);
+        }
+
     }
 }
