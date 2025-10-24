@@ -5,7 +5,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     [SerializeField] private TimerUI timerUI = new();
-    private bool _isStart = true;
+    private bool _isWorking = false;
     private int mouseButton = 0;
     private float _dealy = 0.5f;
     private int _stepTimer = 1;
@@ -22,29 +22,31 @@ public class Timer : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(mouseButton))
         {
-            if (_isStart)
-            {
-                _timer = StartCoroutine(Counter());
-                _isStart = false;
-            }
-            else
+            if (_isWorking)
             {
                 if (_timer != null)
                     StopCoroutine(_timer);
 
-                _isStart = true;
+                _isWorking = false;
+            }
+            else
+            {
+                _timer = StartCoroutine(Counter());
+                _isWorking = true;   
             }
         }
     }
 
     private IEnumerator Counter()
     {
+        var wait = new WaitForSeconds(_dealy);
+
         while (enabled)
         {
             _time += _stepTimer;
             timerUI.Draw(_time);
 
-            yield return new WaitForSeconds(_dealy);
+            yield return wait;
         }
 
     }
