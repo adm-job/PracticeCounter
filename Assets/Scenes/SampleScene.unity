@@ -628,6 +628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _textTimer: {fileID: 1437660026}
+  _timer: {fileID: 1437660030}
 --- !u!61 &1437660029
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -685,7 +686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f49ef5e82ac38749b32e36949125e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerUI: {fileID: 1437660028}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

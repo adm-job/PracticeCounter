@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private TimerUI timerUI = new();
-    private bool _isStart = true;
+    public event Action<int> OnTimeChanged;
+
+    private bool _isRunning = false;
     private int mouseButton = 0;
     private float _dealy = 0.5f;
     private int _stepTimer = 1;
@@ -16,36 +18,43 @@ public class Timer : MonoBehaviour
     {
         if (_timer != null)
             StopCoroutine(_timer);
+
+        ResetTimer();
     }
 
-    private void Update()
+    public void Update()
     {
         if (Input.GetMouseButtonDown(mouseButton))
         {
-            if (_isStart)
+            if (_isRunning == false)
             {
                 _timer = StartCoroutine(Counter());
-                _isStart = false;
+                _isRunning = true;
             }
             else
             {
                 if (_timer != null)
                     StopCoroutine(_timer);
 
-                _isStart = true;
+                _isRunning = false;
             }
         }
-    }
+    } 
 
     private IEnumerator Counter()
     {
         while (enabled)
         {
             _time += _stepTimer;
-            timerUI.Draw(_time);
+            OnTimeChanged?.Invoke(_time);
 
             yield return new WaitForSeconds(_dealy);
         }
 
+    }
+    public void ResetTimer()
+    {
+        _time = 0;
+        OnTimeChanged?.Invoke(_time);
     }
 }

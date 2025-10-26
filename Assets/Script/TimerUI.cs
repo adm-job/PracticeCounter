@@ -9,12 +9,16 @@ using UnityEngine.UIElements;
 public class TimerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _textTimer;
+    [SerializeField] private Timer _timer;
 
-    private int _resetTimer = 0;
-
-    private void Start()
+    private void OnEnable()
     {
-        _textTimer.text = _resetTimer.ToString();
+        _timer.OnTimeChanged += Draw;
+    }
+
+    private void OnDisable()
+    {
+        _timer.OnTimeChanged -= Draw;
     }
 
     public void Draw(int number)
