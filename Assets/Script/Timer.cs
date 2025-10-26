@@ -32,6 +32,7 @@ public class Timer : MonoBehaviour
                 _isRunning = true;
             }
             else
+
             {
                 if (_timer != null)
                     StopCoroutine(_timer);
@@ -43,12 +44,14 @@ public class Timer : MonoBehaviour
 
     private IEnumerator Counter()
     {
+        var wait = new WaitForSeconds(_dealy);
+
         while (enabled)
         {
             _time += _stepTimer;
             OnTimeChanged?.Invoke(_time);
 
-            yield return new WaitForSeconds(_dealy);
+            yield return wait;
         }
 
     }
